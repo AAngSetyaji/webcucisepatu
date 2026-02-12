@@ -4,7 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "vercel-build": "npm install && vite build && curl -sS https://getcomposer.org/installer | php && php composer.phar install --no-dev --prefer-dist --optimize-autoloader && rm composer.phar"
+        "vercel-build": "npm install && vite build"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^5.1.4",
