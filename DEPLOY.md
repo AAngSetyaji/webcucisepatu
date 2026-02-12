@@ -10,7 +10,7 @@ This project is configured to be deployed to Vercel using the `vercel-php` runti
    npm i -g vercel
    ```
 
-## Option 1: Deploy via Git (Recommended)
+## Option 1: Deploy via Git (Recommended) 
 
 1. Push your code to GitHub, GitLab, or Bitbucket.
 2. Import the project in Vercel Dashboard.
