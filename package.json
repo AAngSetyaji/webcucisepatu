@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "vercel-build": "npm install && vite build && composer install --no-dev --prefer-dist --optimize-autoloader"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^5.1.4",
