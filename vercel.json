@@ -1,6 +1,7 @@
 {
     "version": 2,
-    "buildCommand": "npm install && npm run build",
+    "installCommand": "npm install",
+    "buildCommand": "bash build.sh",
     "functions": {
         "api/index.php": {
             "runtime": "vercel-php@0.7.2"
@@ -12,7 +13,7 @@
             "dest": "/public/build/$1"
         },
         {
-            "src": "/(.*\\.(ico|png|jpg|jpeg|svg|gif|webp|css|js|json|txt|xml))",
+            "src": "/(robots\\.txt|favicon\\.ico)",
             "dest": "/public/$1"
         },
         {

@@ -10,27 +10,44 @@ This project is configured to be deployed to Vercel using the `vercel-php` runti
    npm i -g vercel
    ```
 
-## Option 1: Deploy via Git (Recommended) 
+## Important: Build Assets
 
-1. Push your code to GitHub, GitLab, or Bitbucket.
-2. Import the project in Vercel Dashboard.
-3. **Configure Project Settings:**
-   - **Framework Preset:** `Vite` or `Other`.
-   - **Build Command:** Override to:
-     ```bash
-     npm run vercel-build
-     ```
-     (This runs `npm install && vite build && composer install ...`)
-   - **Output Directory:** `public` (or leave default if Vercel detects it correctly, but `vercel.json` routes handle serving).
+The `public/build` directory has been **removed from `.gitignore`** and is now committed to the repository. This ensures that:
+- Build assets are available immediately on deployment
+- The Vercel build process can also regenerate them if needed
 
-4. **Environment Variables:**
-   Add the following environment variables in Vercel Project Settings:
-   - `APP_KEY`: Copy this from your local `.env` file (e.g., `base64:...`).
-   - `APP_ENV`: `production`
-   - `APP_DEBUG`: `false` (or `true` for debugging)
-   - `APP_URL`: `https://your-project-name.vercel.app` (or your custom domain)
+## Option 1: Deploy via Git (Recommended)
 
-5. Deploy!
+1. **Build locally** (already done):
+   ```bash
+   npm run build
+   ```
+
+2. **Commit all changes** including build assets:
+   ```bash
+   git add .
+   git commit -m "Deploy to Vercel with build assets"
+   git push
+   ```
+
+3. **Import project in Vercel Dashboard**:
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "Add New Project"
+   - Import your Git repository
+
+4. **Configure Project Settings**:
+   - **Framework Preset**: `Other` (don't use Vite preset)
+   - **Build Command**: Use default or `bash build.sh`
+   - **Output Directory**: Leave empty
+   - **Install Command**: `npm install`
+
+5. **Environment Variables**:
+   The `APP_KEY` is already in `vercel.json`, but for production you should add it to Vercel Dashboard instead:
+   - Go to Project Settings → Environment Variables
+   - Add: `APP_KEY` = `base64:Ic8nLP71N10E2ZKLNdwStuXrDvClTeGpBQppj5JwcuQ=`
+   - (Optional) Remove APP_KEY from `vercel.json` for security
+
+6. **Deploy!**
 
 ## Option 2: Deploy via CLI
 
@@ -39,14 +56,25 @@ This project is configured to be deployed to Vercel using the `vercel-php` runti
    vercel
    ```
 2. Follow the prompts to link the project.
-3. Set up the Environment Variables in the Vercel Dashboard as described above.
-4. For production deployment:
+3. For production deployment:
    ```bash
    vercel --prod
    ```
 
+## Troubleshooting
+
+### Assets returning 404
+If you see 404 errors for `/build/assets/*` files:
+1. Check that `public/build` directory exists and contains files
+2. Verify the build ran successfully in Vercel deployment logs
+3. Check that `vercel.json` routes are configured correctly
+
+### Different asset hashes
+The CSS/JS filenames include content hashes (e.g., `app-B0Pm3QC4.css`). These may differ between local and Vercel builds. This is normal - Laravel's `@vite()` directive reads from `manifest.json` to get the correct filenames.
+
 ## Notes
 
-- **Database:** Vercel does not host databases. You need to use an external database provider (e.g., Supabase, PlanetScale, Neon, or a remote MySQL/PostgreSQL server). Update your `DB_*` environment variables in Vercel accordingly.
-- **Storage:** Vercel functions have a read-only filesystem (except `/tmp`). Ensure you use a cloud storage driver like `s3` for file uploads if needed, or configured the temporary cache paths in `vercel.json` (already done).
+- **Database**: Vercel does not host databases. You need to use an external database provider (e.g., Supabase, PlanetScale, Neon, or a remote MySQL/PostgreSQL server). Update your `DB_*` environment variables in Vercel accordingly.
+- **Storage**: Vercel functions have a read-only filesystem (except `/tmp`). Ensure you use a cloud storage driver like `s3` for file uploads if needed.
+- **Build Script**: The `build.sh` script handles both npm and composer dependencies during deployment.
 
