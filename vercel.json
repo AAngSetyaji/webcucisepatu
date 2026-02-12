@@ -1,6 +1,5 @@
 {
     "version": 2,
-    "framework": "vite",
     "functions": {
         "api/index.php": {
             "runtime": "vercel-php@0.7.2"
@@ -8,16 +7,12 @@
     },
     "routes": [
         {
-            "src": "/build/(.*)",
-            "dest": "/public/build/$1"
+            "src": "/(build|assets|images|favicon.ico|robots.txt)/(.*)",
+            "dest": "/public/$1/$2"
         },
         {
-            "src": "/assets/(.*)",
-            "dest": "/public/assets/$1"
-        },
-        {
-            "src": "/favicon.ico",
-            "dest": "/public/favicon.ico"
+            "src": "/(build|assets|images|favicon.ico|robots.txt)$",
+            "dest": "/public/$1"
         },
         {
             "src": "/(.*)",
